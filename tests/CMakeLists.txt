@@ -1,5 +1,5 @@
 set(target_name tests)
-
+include(CTest)
 include(FetchContent)
 FetchContent_Declare(
   googletest
@@ -7,8 +7,7 @@ FetchContent_Declare(
   GIT_TAG        release-1.12.0
 )
 FetchContent_MakeAvailable(googletest)
-
-enable_testing()
+include(GoogleTest)
 
 add_executable(
   ${target_name}
@@ -23,7 +22,4 @@ target_link_libraries(
   GTest::gtest_main
 )
 
-include(GoogleTest)
 gtest_discover_tests(${target_name})
-
-include_directories(${CMAKE_CURRENT_BINARY_DIR})

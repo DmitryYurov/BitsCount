@@ -1,8 +1,10 @@
+#include "BitsCount.h"
+
 #include <array>
 
 constexpr std::array<std::uint8_t, 256> makeLookupTable() {
     std::array<std::uint8_t, 256> result{ 0 };
-    for (size_t i = 1; i < 256; ++i) {
+    for (std::size_t i = 1; i < 256; ++i) {
         result[i] = (i & 1u) + result[i / 2u];
     }
     return result;
