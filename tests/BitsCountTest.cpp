@@ -33,16 +33,15 @@ TEST(BitsCountTest, Correctness)
 }
 
 TEST(BitsCountTest, CorrectnessAvx) {
-	auto bit_count_avx_func = getBitsCountAvx();
+	auto bit_count_avx_func = bits_count::avx::getFunc();
 	if (!bit_count_avx_func)
 		GTEST_SKIP() << "Either the code has been compiled without AVX support or AVX is not supported by the hardware";
 
-	auto input = _mm512_set_epi64(0xff, 0xffff, 0xf0f0, 0x70607070, INT64_C(0xff) << 56, INT64_C(0xffffffffffffffff), 0, 0x01);
-	//							  e7	e6		e5		e4			e3					 e2							  e1 e0
-	auto avx_result = bit_count_avx_func(input);
-	std::array<std::uint16_t, 8> result;
-	_mm_storeu_epi16(result.data(), avx_result);
-	std::array<std::uint16_t, 8> expected = { 1, 0, 64, 8, 11, 8, 16, 8};
-	//										  e0 e1 e2  e3 e4  e5 e6  e7
-	EXPECT_EQ(result, expected);
+	std::vector<std::int64_t> input{
+		0xff, 0xffff, 0xf0f0, 0x70607070, INT64_C(0xff) << 56, -1, 0, 1, // 8 * 64 bits
+		0xff, 0xffff, 0xf0f0, 0x70607070 // 4 * 64 bits
+	};
+	auto actual = bit_count_avx_func(input);
+	std::vector<std::uint8_t> expected{ 8, 16, 8, 11, 8, 64, 0, 1, 8, 16, 8, 11 };
+	EXPECT_EQ(actual, expected);
 }
