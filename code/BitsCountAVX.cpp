@@ -26,13 +26,8 @@ namespace {
 
 #ifdef AVX512
 	__m128i BitsCountAVXImpl(__m512i num) {
-		__m512i setbits = _mm512_popcnt_epi8(num);
-		__m512i result = setbits;
-		for (std::uint8_t i_byte = 1; i_byte < 8; ++i_byte) {
-			setbits = _mm512_srli_epi64(setbits, 8);
-			result = _mm512_add_epi64(result, setbits);
-		}
-		return _mm_cvtepi8_epi16(_mm512_cvtepi64_epi8(result));
+		__m512i a = _mm512_popcnt_epi64(num);
+		return _mm_cvtepi8_epi16(_mm512_cvtepi64_epi8(a));
 	}
 #endif
 }
