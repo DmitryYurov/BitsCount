@@ -3,6 +3,7 @@
 #include <array>
 #include <bitset>
 #include <immintrin.h>
+#include <cstring>
 #ifdef _MSC_VER
 #include <intrin.h>
 #endif
