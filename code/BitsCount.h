@@ -2,10 +2,15 @@
 #define __BITS_COUNT__
 
 #include <cstdint>
+#include <vector>
 
-std::uint8_t bruteForce(std::int64_t num);
-std::uint8_t algoKernighan(std::int64_t num);
-std::uint8_t lookupBytes(std::int64_t num);
-std::uint8_t divideAndConquer(std::int64_t num);
+namespace bits_count {
+
+std::vector<std::uint8_t> bruteForce(const std::vector<std::int64_t>& nums);
+std::vector<std::uint8_t> algoKernighan(const std::vector<std::int64_t>& nums);
+std::vector<std::uint8_t> lookupBytes(const std::vector<std::int64_t>& nums);
+std::vector<std::uint8_t> divideAndConquer(const std::vector<std::int64_t>& nums);
+
+}
 
 #endif

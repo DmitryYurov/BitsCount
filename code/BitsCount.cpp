@@ -1,6 +1,10 @@
 #include "BitsCount.h"
 
 #include <array>
+#include <algorithm>
+#include <iterator>
+
+namespace {
 
 constexpr std::array<std::uint8_t, 256> makeLookupTable() {
     std::array<std::uint8_t, 256> result{ 0 };
@@ -10,7 +14,7 @@ constexpr std::array<std::uint8_t, 256> makeLookupTable() {
     return result;
 }
 
-std::uint8_t bruteForce(std::int64_t num) {
+inline std::uint8_t bruteForce(std::int64_t num) {
     std::uint8_t result = 0u;
     for (std::uint8_t i = 0; i < 64; ++i)
         if (num & (INT64_C(1) << i)) ++result;
@@ -18,7 +22,7 @@ std::uint8_t bruteForce(std::int64_t num) {
     return result;
 }
 
-std::uint8_t algoKernighan(std::int64_t num) {
+inline std::uint8_t algoKernighan(std::int64_t num) {
     std::uint8_t result = 0;
     while (num) {
         num &= num - 1;
@@ -28,7 +32,7 @@ std::uint8_t algoKernighan(std::int64_t num) {
     return result;
 }
 
-std::uint8_t lookupBytes(std::int64_t num) {
+inline std::uint8_t lookupBytes(std::int64_t num) {
     static constexpr std::array<std::uint8_t, 256> table = makeLookupTable();
 
     std::uint8_t result = table[num & 0xff];
@@ -38,7 +42,7 @@ std::uint8_t lookupBytes(std::int64_t num) {
     return result;
 }
 
-std::uint8_t divideAndConquer(std::int64_t num) {
+inline std::uint8_t divideAndConquer(std::int64_t num) {
     num = (num & INT64_C(0x5555555555555555)) + (num >> 1 & INT64_C(0x5555555555555555));
     num = (num & INT64_C(0x3333333333333333)) + (num >> 2 & INT64_C(0x3333333333333333));
     num = (num & INT64_C(0x0F0F0F0F0F0F0F0F)) + (num >> 4 & INT64_C(0x0F0F0F0F0F0F0F0F));
@@ -48,3 +52,26 @@ std::uint8_t divideAndConquer(std::int64_t num) {
 
     return static_cast<std::uint8_t>(num);
 }
+
+using BitCountType = std::uint8_t(*)(std::int64_t);
+template<BitCountType worker>
+inline std::vector<std::uint8_t> vectorized(const std::vector<std::int64_t>& nums) {
+    std::vector<std::uint8_t> result;
+    result.reserve(nums.size());
+    std::transform(nums.begin(), nums.end(), std::back_inserter(result), [](auto item) { return worker(item); });
+
+    return result;
+}
+
+}
+
+namespace bits_count {
+
+std::vector<std::uint8_t> bruteForce(const std::vector<std::int64_t>& nums) { return vectorized<::bruteForce>(nums); }
+std::vector<std::uint8_t> algoKernighan(const std::vector<std::int64_t>& nums) { return vectorized<::algoKernighan>(nums); }
+std::vector<std::uint8_t> lookupBytes(const std::vector<std::int64_t>& nums) { return vectorized<::lookupBytes>(nums); }
+std::vector<std::uint8_t> divideAndConquer(const std::vector<std::int64_t>& nums) { return vectorized<::divideAndConquer>(nums); }
+
+}
+
+
