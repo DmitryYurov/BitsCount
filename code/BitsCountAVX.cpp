@@ -19,10 +19,10 @@ inline bool hasAVXBitalgSupport() {
 	__cpuidex(cpui.data(), 7, 0);
 	const std::bitset<32> ecx = cpui[2];
 
-	return ecx[12];
+	return ecx[14];
 #else
 	__builtin_cpu_init();
-	return __builtin_cpu_supports("avx512bitalg");
+	return __builtin_cpu_supports("avx512vpopcntdq");
 #endif
 }
 

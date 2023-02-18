@@ -39,11 +39,11 @@ std::uint8_t lookupBytes(std::int64_t num) {
 }
 
 std::uint8_t divideAndConquer(std::int64_t num) {
-    num = (num & INT64_C(0x5555555555555555)) + ((num >> 1) & INT64_C(0x5555555555555555));
-    num = (num & INT64_C(0x3333333333333333)) + ((num >> 2) & INT64_C(0x3333333333333333));
-    num = (num & INT64_C(0x0F0F0F0F0F0F0F0F)) + ((num >> 4) & INT64_C(0x0F0F0F0F0F0F0F0F));
-    num = (num & INT64_C(0x00FF00FF00FF00FF)) + ((num >> 8) & INT64_C(0x00FF00FF00FF00FF));
-    num = (num & INT64_C(0x0000FFFF0000FFFF)) + ((num >> 16) & INT64_C(0x0000FFFF0000FFFF));
+    num = (num & INT64_C(0x5555555555555555)) + (num >> 1 & INT64_C(0x5555555555555555));
+    num = (num & INT64_C(0x3333333333333333)) + (num >> 2 & INT64_C(0x3333333333333333));
+    num = (num & INT64_C(0x0F0F0F0F0F0F0F0F)) + (num >> 4 & INT64_C(0x0F0F0F0F0F0F0F0F));
+    num = (num & INT64_C(0x00FF00FF00FF00FF)) + (num >> 8 & INT64_C(0x00FF00FF00FF00FF));
+    num = (num & INT64_C(0x0000FFFF0000FFFF)) + (num >> 16 & INT64_C(0x0000FFFF0000FFFF));
     num = (num & INT64_C(0x00000000FFFFFFFF)) + (num >> 32);
 
     return static_cast<std::uint8_t>(num);
