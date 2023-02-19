@@ -6,7 +6,7 @@
 
 namespace bits_count::avx {
 
-using BitsCountAvx = std::vector<std::uint8_t>(*)(const std::vector<std::int64_t>&);
+using BitsCountAvx = std::vector<std::uint8_t>(*)(const std::vector<std::uint64_t>&);
 BitsCountAvx getFunc();
 
 }

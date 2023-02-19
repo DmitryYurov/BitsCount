@@ -27,7 +27,7 @@ inline bool hasAVXPopcntSupport() {
 }
 
 #ifdef AVX512
-std::vector<std::uint8_t> BitsCountAVXImpl(const std::vector<std::int64_t>& nums) {
+std::vector<std::uint8_t> BitsCountAVXImpl(const std::vector<std::uint64_t>& nums) {
 	const size_t nums_size = nums.size();
 	auto result = std::vector<std::uint8_t>(nums_size, 0u);
 

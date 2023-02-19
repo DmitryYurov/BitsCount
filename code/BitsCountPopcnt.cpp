@@ -28,7 +28,7 @@ inline bool hasPopcntSupport() {
 #endif
 }
 
-std::vector<std::uint8_t> BitsCountPopcntImpl(const std::vector<std::int64_t>& nums) {
+std::vector<std::uint8_t> BitsCountPopcntImpl(const std::vector<std::uint64_t>& nums) {
 	std::vector<std::uint8_t> result;
 	result.reserve(nums.size());
 	std::transform(nums.begin(), nums.end(), std::back_inserter(result),

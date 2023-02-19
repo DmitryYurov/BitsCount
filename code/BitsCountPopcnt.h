@@ -6,7 +6,7 @@
 
 namespace bits_count::popcnt {
 
-using BitsCountPopcnt = std::vector<std::uint8_t>(*)(const std::vector<std::int64_t>&);
+using BitsCountPopcnt = std::vector<std::uint8_t>(*)(const std::vector<std::uint64_t>&);
 BitsCountPopcnt getFunc();
 
 }
