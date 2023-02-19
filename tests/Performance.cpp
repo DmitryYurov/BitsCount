@@ -1,0 +1,88 @@
+#include <gtest/gtest.h>
+
+#include <chrono>
+#include <limits>
+#include <random>
+#include <iostream>
+
+#include "BitsCount.h"
+#include "BitsCountAVX.h"
+#include "BitsCountPopcnt.h"
+
+namespace {
+std::vector<std::uint64_t> createPerformanceInput() {
+	constexpr size_t vec_size = 10000000u;
+	constexpr std::uint64_t seed = UINT64_C(1676825615);
+	std::mt19937_64 rng(seed);
+
+	std::uniform_int_distribution<std::mt19937_64::result_type> dist(0, std::numeric_limits<std::uint64_t>::max());
+
+	std::vector<std::uint64_t> result(vec_size, 0u);
+	for (size_t i = 0; i < vec_size; ++i)
+		result[i] = dist(rng);
+
+	return result;
+}
+
+using Method = std::vector<std::uint8_t>(*)(const std::vector<std::uint64_t>&);
+void measurePerformance(Method method) {
+	using std::chrono::high_resolution_clock;
+	using std::chrono::duration;
+
+	constexpr size_t n_runs = 10;
+	static const auto input = createPerformanceInput();
+
+	method(input); // skipping the first run
+
+	const auto t1 = high_resolution_clock::now();
+	for (size_t i = 0; i < n_runs; ++i)
+		method(input);
+	const auto t2 = high_resolution_clock::now();
+
+	auto us_double = duration<double, std::micro>(t2 - t1).count();
+	us_double /= n_runs * 1000; // us --> ms
+
+	std::cout << "Executino has taken " << us_double << " ms per run" << std::endl;
+}
+
+}
+
+TEST(Performance, BF) {
+	measurePerformance(bits_count::bruteForce);
+}
+
+TEST(Performance, Kernighan) {
+	measurePerformance(bits_count::algoKernighan);
+}
+
+TEST(Performance, Lookup) {
+	measurePerformance(bits_count::lookupBytes);
+}
+
+TEST(Performance, DQ) {
+	measurePerformance(bits_count::divideAndConquer);
+}
+
+TEST(Performance, BitsetCount) {
+	measurePerformance(bits_count::bitsetCount);
+}
+
+TEST(Performance, StdPopcnt) {
+	measurePerformance(bits_count::stdPopcnt);
+}
+
+TEST(Performance, Popcnt) {
+	auto bit_count_popcnt_func = bits_count::popcnt::getFunc();
+	if (!bit_count_popcnt_func)
+		GTEST_SKIP() << "POPCNT instruction is not supported by the hardware";
+
+	measurePerformance(bit_count_popcnt_func);
+}
+
+TEST(Performance, AVX) {
+	auto bit_count_avx_func = bits_count::avx::getFunc();
+	if (!bit_count_avx_func)
+		GTEST_SKIP() << "Either the code has been compiled without AVX support or AVX is not supported by the hardware";
+
+	measurePerformance(bit_count_avx_func);
+}

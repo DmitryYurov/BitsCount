@@ -11,14 +11,14 @@ include(GoogleTest)
 
 add_executable(
   ${target_name}
-  BitsCountTest.cpp
+  Validity.cpp
+  Performance.cpp
 )
 target_include_directories(${target_name} PRIVATE "../code")
 target_link_libraries(
   ${target_name}
   PRIVATE
   bitscount
-  PUBLIC
   GTest::gtest_main
 )
 
