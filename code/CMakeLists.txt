@@ -11,14 +11,14 @@ if (AVX512)
 	target_compile_options(${target_name}
 		PRIVATE "$<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/permissive->"
 		PRIVATE "$<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/arch:AVX512>"
-		PRIVATE "$<$<COMPILE_LANG_AND_ID:CXX,GNU>:-mavx512f>"
 		PRIVATE "$<$<COMPILE_LANG_AND_ID:CXX,GNU>:-mavx512vpopcntdq>"
-		PRIVATE "$<$<COMPILE_LANG_AND_ID:CXX,Clang>:-mavx512f>"
 		PRIVATE "$<$<COMPILE_LANG_AND_ID:CXX,Clang>:-mavx512vpopcntdq>"
 	)
 else()
 target_compile_options(${target_name}
 		PRIVATE "$<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/permissive->"
+		PRIVATE "$<$<COMPILE_LANG_AND_ID:CXX,GNU>:-mpopcnt>"
+		PRIVATE "$<$<COMPILE_LANG_AND_ID:CXX,Clang>:-mpopcnt>"
 	)
 endif()
 

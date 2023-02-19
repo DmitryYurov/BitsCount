@@ -4,6 +4,7 @@
 
 #include "BitsCount.h"
 #include "BitsCountAVX.h"
+#include "BitsCountPopcnt.h"
 
 static const std::vector<std::int64_t> correctness_input{
 	0xff,
@@ -42,6 +43,14 @@ TEST(BitsCountTest, CorrecntessLookup)
 TEST(BitsCountTest, CorrecntessDQ)
 {
 	EXPECT_EQ(bits_count::divideAndConquer(correctness_input), correctness_expected);
+}
+
+TEST(BitsCountTest, CorrecntessPopcnt)
+{
+	auto bit_count_popcnt_func = bits_count::popcnt::getFunc();
+	if (!bit_count_popcnt_func)
+		GTEST_SKIP() << "POPCNT instruction is not supported by the hardware";
+	EXPECT_EQ(bit_count_popcnt_func(correctness_input), correctness_expected);
 }
 
 TEST(BitsCountTest, CorrectnessAvx) {

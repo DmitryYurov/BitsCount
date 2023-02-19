@@ -9,7 +9,7 @@
 #endif
 
 namespace {
-inline bool hasAVXBitalgSupport() {
+inline bool hasAVXPopcntSupport() {
 #ifdef _MSC_VER
 	std::array<int, 4> cpui = { 0 };
 
@@ -62,7 +62,8 @@ namespace bits_count::avx {
 BitsCountAvx getFunc()
 {
 #ifdef AVX512
-	return hasAVXBitalgSupport() ? &BitsCountAVXImpl : nullptr;
+	static auto func_ptr = hasAVXPopcntSupport() ? &BitsCountAVXImpl : nullptr;
+	return func_ptr;
 #else
 	return nullptr;
 #endif
