@@ -78,7 +78,9 @@ inline std::vector<std::uint8_t> vectorized(const std::vector<std::uint64_t>& nu
 namespace bits_count {
 
 std::vector<std::uint8_t> bruteForce(const std::vector<std::uint64_t>& nums) { return vectorized<::bruteForce>(nums); }
-std::vector<std::uint8_t> algoKernighan(const std::vector<std::uint64_t>& nums) { return vectorized<::algoKernighan>(nums); }
+std::vector<std::uint8_t> algoKernighan(const std::vector<std::uint64_t>& nums) {
+    return vectorized<::algoKernighan>(nums);
+}
 std::vector<std::uint8_t> lookupBytes(const std::vector<std::uint64_t>& nums) { return vectorized<::lookupBytes>(nums); }
 std::vector<std::uint8_t> divideAndConquer(const std::vector<std::uint64_t>& nums) { return vectorized<::divideAndConquer>(nums); }
 std::vector<std::uint8_t> bitsetCount(const std::vector<std::uint64_t>& nums) { return vectorized<::bitsetCount>(nums); }

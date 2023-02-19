@@ -28,6 +28,7 @@ inline bool hasPopcntSupport() {
 #endif
 }
 
+#ifdef POPCNT
 std::vector<std::uint8_t> BitsCountPopcntImpl(const std::vector<std::uint64_t>& nums) {
 	std::vector<std::uint8_t> result;
 	result.reserve(nums.size());
@@ -39,14 +40,19 @@ std::vector<std::uint8_t> BitsCountPopcntImpl(const std::vector<std::uint64_t>& 
 
 	return result;
 }
+#endif
 }
 
 namespace bits_count::popcnt {
 
 BitsCountPopcnt getFunc()
 {
+#ifdef POPCNT
 	static auto func_ptr = hasPopcntSupport() ? &BitsCountPopcntImpl : nullptr;
 	return func_ptr;
+#else
+	return nullptr;
+#endif
 }
 
 }

@@ -57,7 +57,7 @@ TEST(Correcntess, Popcnt)
 {
 	auto bit_count_popcnt_func = bits_count::popcnt::getFunc();
 	if (!bit_count_popcnt_func)
-		GTEST_SKIP() << "POPCNT instruction is not supported by the hardware";
+		GTEST_SKIP() << "POPCNT instruction is not supported by the hardware or manually disabled";
 	EXPECT_EQ(bit_count_popcnt_func(correctness_input), correctness_expected);
 }
 

@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 
+#include <numeric>
 #include <chrono>
 #include <limits>
 #include <random>
@@ -35,14 +36,15 @@ void measurePerformance(Method method) {
 	method(input); // skipping the first run
 
 	const auto t1 = high_resolution_clock::now();
+	std::vector<std::uint8_t> result;
 	for (size_t i = 0; i < n_runs; ++i)
-		method(input);
+		result = method(input);
 	const auto t2 = high_resolution_clock::now();
 
 	auto us_double = duration<double, std::micro>(t2 - t1).count();
 	us_double /= n_runs * 1000; // us --> ms
 
-	std::cout << "Executino has taken " << us_double << " ms per run" << std::endl;
+	std::cout << "Execution has taken " << us_double << " ms per run" << std::endl;
 }
 
 }
@@ -74,7 +76,7 @@ TEST(Performance, StdPopcnt) {
 TEST(Performance, Popcnt) {
 	auto bit_count_popcnt_func = bits_count::popcnt::getFunc();
 	if (!bit_count_popcnt_func)
-		GTEST_SKIP() << "POPCNT instruction is not supported by the hardware";
+		GTEST_SKIP() << "POPCNT instruction is not supported by the hardware or manually disabled";
 
 	measurePerformance(bit_count_popcnt_func);
 }
