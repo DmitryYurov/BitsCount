@@ -19,7 +19,7 @@ constexpr std::array<std::uint8_t, 256> makeLookupTable() {
 inline std::uint8_t bruteForce(std::uint64_t num) {
     std::uint8_t result = 0u;
     for (std::uint8_t i = 0; i < 64; ++i)
-        if (num & (INT64_C(1) << i)) ++result;
+        if (num & (UINT64_C(1) << i)) ++result;
 
     return result;
 }
