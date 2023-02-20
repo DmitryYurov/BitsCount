@@ -41,7 +41,7 @@ std::vector<std::uint8_t> BitsCountAVXImpl(const std::vector<std::uint64_t>& num
 
 	// counting the bits in the rest of the input array
 	if (i_item < nums_size) {
-		std::array<std::int64_t, 8> in_buf = { 0 };
+		std::array<std::uint64_t, 8> in_buf = { 0 };
 		std::memcpy(in_buf.data(), nums.data() + i_item, (nums_size - i_item) * 8);
 
 		buf_avx = _mm512_loadu_epi64(in_buf.data());
