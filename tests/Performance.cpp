@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 
+#include <array>
 #include <numeric>
 #include <chrono>
 #include <limits>
@@ -30,21 +31,28 @@ void measurePerformance(Method method) {
 	using std::chrono::high_resolution_clock;
 	using std::chrono::duration;
 
-	constexpr size_t n_runs = 10;
+	constexpr size_t n_runs = 400;
 	static const auto input = createPerformanceInput();
 
 	method(input); // skipping the first run
 
-	const auto t1 = high_resolution_clock::now();
-	std::vector<std::uint8_t> result;
-	for (size_t i = 0; i < n_runs; ++i)
-		result = method(input);
-	const auto t2 = high_resolution_clock::now();
+	std::array<double, n_runs> durations_us = { 0 };
+	for (size_t i = 0; i < n_runs; ++i) {
+		const auto t1 = high_resolution_clock::now();
+		method(input);
+		const auto t2 = high_resolution_clock::now();
+		durations_us[i] = duration<double, std::micro>(t2 - t1).count();
+	}
+	const double mean_us = std::accumulate(durations_us.begin(), durations_us.end(), 0.0,
+										   [](double sum, double item) { return sum + item; }) / n_runs;
+	const double stddev = std::sqrt(std::accumulate(durations_us.begin(), durations_us.end(), 0.0,
+													[mean_us](double sum, double item) {
+														return sum + (item - mean_us) * (item - mean_us);
+													}) / (n_runs - 1)
+									);
 
-	auto us_double = duration<double, std::micro>(t2 - t1).count();
-	us_double /= n_runs * 1000; // us --> ms
-
-	std::cout << "Execution has taken " << us_double << " ms per run" << std::endl;
+	std::cout << "Execution has taken " << (mean_us * 1.e-3) << " ms per run" << std::endl;
+	std::cout << "With standard deviation " << (stddev * 1.e-3) << std::endl;
 }
 
 }
