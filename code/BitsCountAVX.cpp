@@ -33,7 +33,7 @@ std::vector<std::uint8_t> BitsCountAVXImpl(const std::vector<std::uint64_t>& num
 
 	__m512i buf_avx;
 	size_t i_item = 0;
-	for (; i_item + 8 <= nums_size; i_item = i_item + 8) {
+	for (const size_t mult_size = (nums_size / 8) * 8; i_item < mult_size; i_item += 8) {
 		buf_avx = _mm512_loadu_epi64(nums.data() + i_item);
 		buf_avx = _mm512_popcnt_epi64(buf_avx);
 		_mm_storeu_si64(result.data() + i_item, _mm512_cvtepi64_epi8(buf_avx));
