@@ -60,7 +60,7 @@ inline std::uint8_t bitsetCount(std::uint64_t  num) {
 }
 
 inline std::uint8_t stdPopcnt(std::uint64_t nums) {
-    return std::popcount(nums);
+    return static_cast<std::uint8_t>(std::popcount(nums));
 }
 
 using BitCountType = std::uint8_t(*)(std::uint64_t);

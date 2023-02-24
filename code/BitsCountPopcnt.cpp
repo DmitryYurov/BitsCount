@@ -29,14 +29,15 @@ inline bool hasPopcntSupport() {
 }
 
 #ifdef POPCNT
+
+inline std::uint8_t popcnt(std::uint64_t num) {
+	return static_cast<std::uint8_t>(_mm_popcnt_u64(num));
+}
+
 std::vector<std::uint8_t> BitsCountPopcntImpl(const std::vector<std::uint64_t>& nums) {
 	std::vector<std::uint8_t> result;
 	result.reserve(nums.size());
-	std::transform(nums.begin(), nums.end(), std::back_inserter(result),
-				   [](auto item)
-				   {
-					   return static_cast<std::uint8_t>(_mm_popcnt_u64(item));
-				   });
+	std::transform(nums.begin(), nums.end(), std::back_inserter(result), popcnt);
 
 	return result;
 }
