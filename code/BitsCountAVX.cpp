@@ -9,7 +9,7 @@
 #endif
 
 namespace {
-inline bool hasAVXPopcntSupport() {
+bool hasAVXPopcntSupport() {
 #ifdef _MSC_VER
 	std::array<int, 4> cpui = { 0 };
 

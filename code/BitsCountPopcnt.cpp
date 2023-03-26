@@ -11,7 +11,7 @@
 
 
 namespace {
-inline bool hasPopcntSupport() {
+bool hasPopcntSupport() {
 #ifdef _MSC_VER
 	std::array<int, 4> cpui = { 0 };
 
@@ -30,7 +30,7 @@ inline bool hasPopcntSupport() {
 
 #ifdef POPCNT
 
-inline std::uint8_t popcnt(std::uint64_t num) {
+std::uint8_t popcnt(std::uint64_t num) {
 	return static_cast<std::uint8_t>(_mm_popcnt_u64(num));
 }
 

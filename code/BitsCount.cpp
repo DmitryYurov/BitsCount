@@ -16,7 +16,7 @@ constexpr std::array<std::uint8_t, 256> makeLookupTable() {
     return result;
 }
 
-inline std::uint8_t bruteForce(std::uint64_t num) {
+std::uint8_t bruteForce(std::uint64_t num) {
     std::uint8_t result = 0u;
     for (std::uint8_t i = 0; i < 64; ++i)
         if (num & (UINT64_C(1) << i)) ++result;
@@ -24,7 +24,7 @@ inline std::uint8_t bruteForce(std::uint64_t num) {
     return result;
 }
 
-inline std::uint8_t algoKernighan(std::uint64_t num) {
+std::uint8_t algoKernighan(std::uint64_t num) {
     std::uint8_t result = 0;
     while (num) {
         num &= num - 1;
@@ -34,7 +34,7 @@ inline std::uint8_t algoKernighan(std::uint64_t num) {
     return result;
 }
 
-inline std::uint8_t lookupBytes(std::uint64_t num) {
+std::uint8_t lookupBytes(std::uint64_t num) {
     static constexpr std::array<std::uint8_t, 256> table = makeLookupTable();
 
     std::uint8_t result = table[num & 0xff];
@@ -44,7 +44,7 @@ inline std::uint8_t lookupBytes(std::uint64_t num) {
     return result;
 }
 
-inline std::uint8_t divideAndConquer(std::uint64_t num) {
+std::uint8_t divideAndConquer(std::uint64_t num) {
     num = (num & UINT64_C(0x5555555555555555)) + (num >> 1 & UINT64_C(0x5555555555555555));
     num = (num & UINT64_C(0x3333333333333333)) + (num >> 2 & UINT64_C(0x3333333333333333));
     num = (num & UINT64_C(0x0F0F0F0F0F0F0F0F)) + (num >> 4 & UINT64_C(0x0F0F0F0F0F0F0F0F));
@@ -55,17 +55,17 @@ inline std::uint8_t divideAndConquer(std::uint64_t num) {
     return static_cast<std::uint8_t>(num);
 }
 
-inline std::uint8_t bitsetCount(std::uint64_t  num) {
+std::uint8_t bitsetCount(std::uint64_t  num) {
     return static_cast<std::uint8_t>(std::bitset<64>(num).count());
 }
 
-inline std::uint8_t stdPopcnt(std::uint64_t nums) {
+std::uint8_t stdPopcnt(std::uint64_t nums) {
     return static_cast<std::uint8_t>(std::popcount(nums));
 }
 
 using BitCountType = std::uint8_t(*)(std::uint64_t);
 template<BitCountType worker>
-inline std::vector<std::uint8_t> vectorized(const std::vector<std::uint64_t>& nums) {
+std::vector<std::uint8_t> vectorized(const std::vector<std::uint64_t>& nums) {
     std::vector<std::uint8_t> result;
     result.reserve(nums.size());
     std::transform(nums.begin(), nums.end(), std::back_inserter(result), [](auto item) { return worker(item); });
