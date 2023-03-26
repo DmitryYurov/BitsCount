@@ -3,6 +3,8 @@
 A small repository with examples of how one can count set bits in an integer.
 If you just want to get a gist of different methods of computing the set bits, just navigate to the `code` folder and look into `.cpp` files.
 
+A detailed discussion of the algorithms' performance can be found in [this post](https://www.linkedin.com/feed/update/urn:li:activity:7038410378980032512/).
+
 ## Requirements:
 * C++20-capable compiler (mainly because of `std::popcount` function from `std`, all the rest can be compiled with `C++17`)
 * With `AVX512` option: `avx512vpopcntdq`- and `popcnt`-capable hardware
